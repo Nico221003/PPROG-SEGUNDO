@@ -81,7 +81,7 @@ STATUS object_set_name(Object* object, char* name) {
 
 /** It gets the name of a object
   */
-const char * space_get_name(Object* Object) {
+const char * object_get_name(Object* Object){
   if (!Object) {
     return NULL;
   }
@@ -90,8 +90,7 @@ const char * space_get_name(Object* Object) {
 
 /** It prints the object information
   */
-STATUS object_print(Object* object) {
-
+STATUS object_print(Object* object){
 
   /* Error Control */
   if (!object) {
@@ -100,7 +99,6 @@ STATUS object_print(Object* object) {
 
   /* 1. Print the id and the name of the object */
   fprintf(stdout, "--> Object (Id: %ld; Name: %s)\n", object->id, object->name);
-  
 
   return OK;
 }
