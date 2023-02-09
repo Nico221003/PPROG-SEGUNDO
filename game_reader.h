@@ -1,4 +1,5 @@
 #include "game.h"
+#include "space.h"
 #include "types.h"
 
 #ifndef GAME_READER_H

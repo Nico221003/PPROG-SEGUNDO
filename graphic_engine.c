@@ -11,10 +11,6 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include "graphic_engine.h"
-#include "libscreen.h"
-#include "command.h"
-#include "space.h"
-#include "types.h"
 
 #define ROWS 23
 #define COLUMNS 80

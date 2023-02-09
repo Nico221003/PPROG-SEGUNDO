@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include "space.h"
 #include "game_reader.h"
 
 

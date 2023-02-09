@@ -16,14 +16,16 @@
 
 typedef enum enum_CmdType {
   CMDS,
-  CMDL} T_CmdType;
+  CMDL
+} T_CmdType;
 
 typedef enum enum_Command {
   NO_CMD = -1,
   UNKNOWN,
   EXIT,
   NEXT,
-  BACK} T_Command;
+  BACK
+} T_Command;
 
 T_Command command_get_user_input();
 

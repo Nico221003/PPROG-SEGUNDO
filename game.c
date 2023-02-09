@@ -80,15 +80,22 @@ STATUS game_set_player_location(Game *game, Id id) {
 }
 
 
-STATUS game_set_object_location(Game *game, Id id) {
-  int i = 0;
+STATUS game_set_object_location(Game *game, Id id){
+
+  int aux=0;
 
   if (id == NO_ID) {
     return ERROR;
   }
   
   game->object_location = id;
-  space_set_object(game_get_space(game, id), TRUE);
+  aux = space_set_object(game_get_space(game, id), TRUE);
+
+  if(aux == ERROR){
+    return ERROR;
+  }
+
+  return OK;
 }
 
 Id game_get_player_location(Game *game) {

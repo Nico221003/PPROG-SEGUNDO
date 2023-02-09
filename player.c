@@ -147,11 +147,11 @@ STATUS player_set_location(Player* player, BOOL value){
 
 STATUS player_print(Player* player){
 
+  Id idaux = NO_ID;
+
   if (!player) {
     return ERROR;
   }
-
-  Id idaux = NO_ID;
 
   /* 1. Print the id and the name of the player */
   fprintf(stdout, "--> Player (Id: %ld; Name: %s)\n", player->id, player->name);

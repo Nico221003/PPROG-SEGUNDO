@@ -15,7 +15,7 @@
 
 #define MAX_OBJECT 1
 #define FIRST_OBJECT 1
-#define WORD_SIZE 1000 // no se si hay que definirlo pero sino sale error//
+#define WORD_SIZE 1000
 
 typedef struct _Object Object;
 
@@ -66,8 +66,6 @@ STATUS Object_set_name(Object* object, char* name);
   */
 const char* Object_get_name(Object* object);
 
-
-// hay que incluir spacesetobject y spacegetobject?? //
 
 /**
   * @brief It prints the object information

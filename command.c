@@ -22,6 +22,7 @@ char *cmd_to_str[N_CMD]
 			{"b", "Back"}};
 
 T_Command command_get_user_input() {
+
   T_Command cmd = NO_CMD;
   char input[CMD_LENGHT] = "";
   int i = UNKNOWN - NO_CMD + 1;

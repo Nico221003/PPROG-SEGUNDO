@@ -9,9 +9,13 @@
  */
 
 #ifndef __GRAPHIC_ENGINE__
-#define __GRAPHIC_ENGINE__
+#define __GRAPHIC_ENGINE__x
 
+#include "libscreen.h"
 #include "game.h"
+#include "command.h"
+#include "space.h"
+#include "types.h"
 
 typedef struct _Graphic_engine Graphic_engine;
 
