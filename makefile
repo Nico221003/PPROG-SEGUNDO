@@ -3,7 +3,7 @@ all: hormiguero
 hormiguero: command.o game_loop.o graphic_engine.o game.o space.o game_reader.o player.o object.o libscreen.a
 	gcc -o hormiguero command.o game_loop.o graphic_engine.o game.o game_reader.o space.o player.o object.o -lscreen -L.
 
-game.o: game.c game.h command.h space.h types.h
+game.o: game.c game.h command.h space.h object.h player.h types.h
 	gcc -c -g -Wall -pedantic -ansi game.c
 
 game_loop.o: game_loop.c graphic_engine.h game.h command.h game_reader.h

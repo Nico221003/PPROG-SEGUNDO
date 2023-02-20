@@ -19,8 +19,29 @@
 
 typedef struct _Graphic_engine Graphic_engine;
 
+
+/**
+ * @brief Creates the graphic engine for the game, allocating memory for it
+ * 
+ * @return the new graphic engine
+ */
 Graphic_engine *graphic_engine_create();
+
+
+/**
+ * @brief Destroys the graphic engine, freeing the allocated memory (calls libscreen.h)
+ * 
+ * @param ge pointer to the graphic engine
+ */
 void graphic_engine_destroy(Graphic_engine *ge);
+
+
+/**
+ * @brief Paints all the game with his elements + interfaz elements
+ * 
+ * @param ge pointer to graphic engige
+ * @param game pointer to the game
+ */
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game);
 
 #endif

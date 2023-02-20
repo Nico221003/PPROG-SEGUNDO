@@ -21,6 +21,8 @@ void game_command_unknown(Game *game);
 void game_command_exit(Game *game);
 void game_command_next(Game *game);
 void game_command_back(Game *game);
+void game_command_take(Game *game);
+void game_command_drop(Game *game);
 
 /**
    Game interface implementation
@@ -29,12 +31,20 @@ void game_command_back(Game *game);
 STATUS game_create(Game *game) {
   int i;
 
-  for (i = 0; i < MAX_SPACES; i++) {
+  for(i = 0; i < MAX_SPACES; i++) {
     game->spaces[i] = NULL;
   }
 
-  game->player_location = NO_ID;
-  game->object_location = NO_ID;
+  /*Creamos los objetos en el juego*/
+  game->player = player_create(PLAYER_ID);
+  game->object = object_create(OBJECT_ID);
+
+  /*game->player_location = NO_ID;
+  game->object_location = NO_ID;*/
+
+  player_set_location(game->player, NO_ID);
+  object_set_location(game->object, NO_ID);
+
   game->last_cmd = NO_CMD;
 
   return OK;
@@ -47,6 +57,9 @@ STATUS game_destroy(Game *game) {
   for (i = 0; i < MAX_SPACES && game->spaces[i] != NULL; i++) {
     space_destroy(game->spaces[i]);
   }
+
+  object_destroy(game->object);
+  player_destroy(game->player);
 
   return OK;
 }
@@ -74,7 +87,9 @@ STATUS game_set_player_location(Game *game, Id id) {
     return ERROR;
   }
 
-  game->player_location = id;
+  /*game->player_location = id;*/
+
+  player_set_location(game->player, id);
 
   return OK;
 }
@@ -88,7 +103,9 @@ STATUS game_set_object_location(Game *game, Id id){
     return ERROR;
   }
   
-  game->object_location = id;
+  /*game->object_location = id;*/
+
+  object_set_location(game->object, id);
   aux = space_set_object(game_get_space(game, id), TRUE);
 
   if(aux == ERROR){
@@ -99,11 +116,25 @@ STATUS game_set_object_location(Game *game, Id id){
 }
 
 Id game_get_player_location(Game *game) {
-  return game->player_location;
+
+  if(!game){
+    return NO_ID;
+  }
+
+  /*return game->player_location;*/
+
+  return player_get_location(game->player);
 }
 
 Id game_get_object_location(Game *game) {
-  return game->object_location;
+
+  if(!game){
+    return NO_ID;
+  }
+
+  /*return game->object_location;*/
+
+  return object_get_location(game->object);
 }
 
 STATUS game_update(Game *game, T_Command cmd) {
@@ -124,6 +155,14 @@ STATUS game_update(Game *game, T_Command cmd) {
 
     case BACK:
       game_command_back(game);
+      break;
+    
+    case TAKE:
+      game_command_take(game);
+      break;
+    
+    case DROP:
+      game_command_drop(game);
       break;
 
     default:
@@ -147,8 +186,11 @@ void game_print_data(Game *game) {
     space_print(game->spaces[i]);
   }
 
-  printf("=> Object location: %d\n", (int)game->object_location);
-  printf("=> Player location: %d\n", (int)game->player_location);
+  /*printf("=> Object location: %d\n", (int)game->object_location);*/
+  printf("=> Object location: %d\n", (int)object_get_location(game->object));
+
+  /*printf("=> Player location: %d\n", (int)game->player_location);*/
+  printf("=> Player location: %d\n", (int)player_get_location(game->player));
 }
 
 BOOL game_is_over(Game *game) {
@@ -196,5 +238,64 @@ void game_command_back(Game *game) {
     game_set_player_location(game, current_id);
   }
   
+  return;
+}
+
+
+void game_command_take(Game *game){
+
+  Id object_id = NO_ID;
+  Id playerloc_id = NO_ID;
+  Id objectloc_id = NO_ID;
+
+  if(!game){
+    return;
+  }
+
+  /*Comprobar que player esté en el mismo hab que el objeto*/
+  playerloc_id = game_get_player_location(game);
+  objectloc_id = game_get_object_location(game);
+
+  if(playerloc_id != objectloc_id){
+    return;
+  }
+
+  /*Meter id de objeto en player->object y poner object->location a NO_ID*/
+  object_id = object_get_id(game->object);
+  object_set_location(game->object, NO_ID);
+
+  player_set_object(game->player, object_id);
+
+  return;
+}
+
+
+void game_command_drop(Game *game){
+
+  Id objectloc_id = NO_ID;
+  Id objectplayer_id = NO_ID;
+
+  if(!game){
+    return;
+  }
+
+  /*Comprobación de que el objeto no esté en el mapa*/
+  objectloc_id = game_get_object_location(game);
+  if(objectloc_id != NO_ID){
+    return;
+  }
+
+  /*Comprobación de que el player tenga objeto*/
+  objectplayer_id = player_get_object(game->player);
+  if(objectplayer_id == NO_ID){
+    return;
+  }
+
+  /*Ponemos el objeto del player a NO_ID*/
+  /*Seteamos el objeto donde está el player*/
+  player_set_object(game->player, NO_ID);
+
+  object_set_location(game->object, player_get_location(game->player));
+
   return;
 }

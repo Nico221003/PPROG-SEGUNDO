@@ -1,5 +1,5 @@
 /**
- * @brief It defines a textual graphic engine
+  * @brief It defines a textual graphic engine
  *
  * @file graphic_engine.c
  * @author Profesores PPROG
@@ -133,7 +133,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
   screen_area_clear(ge->help);
   sprintf(str, " The commands you can use are:");
   screen_area_puts(ge->help, str);
-  sprintf(str, "     next or n, back or b, exit or e");
+  sprintf(str, "     next or n, back or b, take or t, drop or d, exit or e");
   screen_area_puts(ge->help, str);
 
   /* Paint in the feedback area */

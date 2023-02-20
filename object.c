@@ -29,8 +29,8 @@ struct _Object
 /** object_create allocates memory for a new object
  *  and initializes its members
  */
-Object *object_create(Id id)
-{
+Object *object_create(Id id){
+
   Object *newObject = NULL;
 
   /* Error control */
@@ -133,7 +133,7 @@ Id object_get_location(Object *object)
 }
 
 /** It sets the location of an object*/
-STATUS object_set_location(Object *object, BOOL value)
+STATUS object_set_location(Object *object, Id id)
 {
   /*error control*/
   if (!object)
@@ -141,7 +141,7 @@ STATUS object_set_location(Object *object, BOOL value)
     return ERROR;
   }
   /*the new location is the given value*/
-  object->location = value;
+  object->location = id;
 
   return OK;
 }

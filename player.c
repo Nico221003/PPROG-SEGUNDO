@@ -101,22 +101,22 @@ STATUS player_set_name(Player* player, char* name){
 
 
 /*Objeto*/
-BOOL player_get_object(Player* player){
+Id player_get_object(Player* player){
 
   if (!player){
-    return FALSE;
+    return NO_ID;
   }
 
   return player->object;
 }
 
-STATUS player_set_object(Player* player, BOOL value){
+STATUS player_set_object(Player* player, Id id){
 
   if (!player) {
     return ERROR;
   }
 
-  player->object = value;
+  player->object = id;
 
   return OK;
 }
@@ -132,19 +132,19 @@ Id player_get_location(Player* player){
   return player->location;
 }
 
-STATUS player_set_location(Player* player, BOOL value){
+STATUS player_set_location(Player* player, Id id){
 
   if(!player){
     return ERROR;
   }
 
-  player->location = value;
+  player->location = id;
 
   return OK;
 }
 
 
-
+/*Print*/
 STATUS player_print(Player* player){
 
   Id idaux = NO_ID;
