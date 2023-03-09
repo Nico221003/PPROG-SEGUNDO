@@ -44,6 +44,26 @@ STATUS game_reader_add_space(Game *game, Space *space) {
   return OK;
 }
 
+STATUS game_reader_add_object(Game *game, Object *object) {
+  int i = 0;
+
+  if (object == NULL) {
+    return ERROR;
+  }
+
+  while (i < MAX_OBJECT && game->object != NULL) {
+    i++;
+  }
+
+  if (i >= MAX_OBJECT) {
+    return ERROR;
+  }
+
+  game->object = object;
+
+  return OK;
+}
+
 
 Id game_reader_get_space_id_at(Game *game, int position) {
   if (position < 0 || position >= MAX_SPACES) {
@@ -52,6 +72,15 @@ Id game_reader_get_space_id_at(Game *game, int position) {
 
   return space_get_id(game->spaces[position]);
 }
+
+Id game_reader_get_object_id_at(Game *game, int position) {
+  if (position < 0 || position >= MAX_SPACES) {
+    return NO_ID;
+  }
+
+  return object_get_id(game->object);
+}
+
 
 
 STATUS game_reader_load_spaces(Game *game, char *filename) {
@@ -97,6 +126,50 @@ STATUS game_reader_load_spaces(Game *game, char *filename) {
         space_set_south(space, south);
         space_set_west(space, west);
         game_reader_add_space(game, space);
+      }
+    }
+  }
+
+  if (ferror(file)) {
+    status = ERROR;
+  }
+
+  fclose(file);
+
+  return status;
+}
+
+STATUS game_reader_load_objects(Game *game, char *filename) {
+  FILE *file = NULL;
+  char line[WORD_SIZE] = "";
+  char name[WORD_SIZE] = "";
+  char *toks = NULL;
+  Id id = NO_ID;
+  Object *object = NULL;
+  STATUS status = OK;
+
+  if (!filename) {
+    return ERROR;
+  }
+
+  file = fopen(filename, "r");
+  if (file == NULL) {
+    return ERROR;
+  }
+
+  while (fgets(line, WORD_SIZE, file)) {
+    if (strncmp("#s:", line, 3) == 0) {
+      toks = strtok(line + 3, "|");
+      id = atol(toks);
+      toks = strtok(NULL, "|");
+      strcpy(name, toks);
+#ifdef DEBUG
+      printf("Leido: %ld|%s\n", id, name,);
+#endif
+      object = object_create(id);
+      if (object != NULL) {
+        object_set_name(object , name);
+        game_reader_add_object(game, object);
       }
     }
   }

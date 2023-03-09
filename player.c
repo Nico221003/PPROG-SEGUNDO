@@ -25,6 +25,7 @@ struct _Player {
   char name[WORD_SIZE + 1]; /*!< Name of the player */
   Id location;              /*!< Location of the player */
   Id object;                /*!< Object the player carrries */
+  int health;                /*!< Health of the player */
 };
 
 
@@ -47,6 +48,7 @@ Player* player_create(Id id) {
   newPlayer->name[0] = '\0';
   newPlayer->location = NO_ID;
   newPlayer->object = NO_ID;
+  newPlayer->health= 5;
 
   return newPlayer;
 }
@@ -141,6 +143,31 @@ STATUS player_set_location(Player* player, Id id){
   player->location = id;
 
   return OK;
+}
+
+/*Health*/
+int player_get_health(Player *player)
+{
+
+    if (!player)
+    {
+        return ERROR;
+    }
+
+    return player->health;
+}
+
+STATUS player_set_health(Player *player, int health)
+{
+
+    if (!player)
+    {
+        return ERROR;
+    }
+
+    player->health = health;
+
+    return OK;
 }
 
 

@@ -56,7 +56,7 @@ void graphic_engine_destroy(Graphic_engine *ge) {
 }
 
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
-  Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, obj_loc = NO_ID;
+  Id id_act = NO_ID, id_back = NO_ID, id_next = NO_ID, id_left = NO_ID, id_right = NO_ID, obj_loc = NO_ID;
   Space *space_act = NULL;
   char obj = '\0';
   char str[255];
@@ -69,6 +69,9 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
     space_act = game_get_space(game, id_act);
     id_back = space_get_north(space_act);
     id_next = space_get_south(space_act);
+    id_left = space_get_west(space_act);
+    id_right = space_get_east(space_act);
+  }
 
     if (game_get_object_location(game) == id_back)
       obj = '*';
@@ -76,7 +79,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
       obj = ' ';
 
     if (id_back != NO_ID) {
-      sprintf(str, "  |         %2d|", (int)id_back);
+      sprintf(str, "  |        %3d|", (int)id_back);
       screen_area_puts(ge->map, str);
       sprintf(str, "  |     %c     |", obj);
       screen_area_puts(ge->map, str);
@@ -94,7 +97,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
     if (id_act != NO_ID) {
       sprintf(str, "  +-----------+");
       screen_area_puts(ge->map, str);
-      sprintf(str, "  | m0^     %2d|", (int)id_act);
+      sprintf(str, "  | m0^    %3d|", (int)id_act);
       screen_area_puts(ge->map, str);
       sprintf(str, "  |     %c     |", obj);
       screen_area_puts(ge->map, str);
@@ -112,17 +115,65 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
       screen_area_puts(ge->map, str);
       sprintf(str, "  +-----------+");
       screen_area_puts(ge->map, str);
-      sprintf(str, "  |         %2d|", (int)id_next);
+      sprintf(str, "  |        %3d|", (int)id_next);
       screen_area_puts(ge->map, str);
       sprintf(str, "  |     %c     |", obj);
       screen_area_puts(ge->map, str);
+      sprintf(str, "  +-----------+");
+      screen_area_puts(ge->map, str);
     }
-  }
+  
+
+  if (game_get_object_location(game) == id_left)
+      obj = '*';
+    else
+      obj = ' ';
+
+    if (id_left != NO_ID) {
+      sprintf(str, "        v");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  +-----------+");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  |        %3d|", (int)id_left);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  |     %c     |", obj);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  +-----------+");
+      screen_area_puts(ge->map, str);
+    }
+
+
+  if (game_get_object_location(game) == id_right)
+      obj = '*';
+    else
+      obj = ' ';
+
+    if (id_right != NO_ID) {
+      sprintf(str, "        v");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  +-----------+ ");
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  |        %3d|", (int)id_right);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  |     %c     |", obj);
+      screen_area_puts(ge->map, str);
+      sprintf(str, "  +-----------+");
+      screen_area_puts(ge->map, str);
+    }
+  
 
   /* Paint in the description area */
   screen_area_clear(ge->descript);
   if ((obj_loc = game_get_object_location(game)) != NO_ID) {
     sprintf(str, "  Object location:%d", (int)obj_loc);
+    screen_area_puts(ge->descript, str);
+    sprintf(str, "  Player location:%d", (int)game_get_player_location(game));
+    screen_area_puts(ge->descript, str);
+    sprintf(str, "  Player health:%d", game_get_player_health(game));
+    screen_area_puts(ge->descript, str);
+    sprintf(str, "  Enemy location:%d", (int)game_get_enemy_location(game));
+    screen_area_puts(ge->descript, str);
+    sprintf(str, "  Enemy health:%d", game_get_enemy_health(game));
     screen_area_puts(ge->descript, str);
   }
 
@@ -133,7 +184,7 @@ void graphic_engine_paint_game(Graphic_engine *ge, Game *game) {
   screen_area_clear(ge->help);
   sprintf(str, " The commands you can use are:");
   screen_area_puts(ge->help, str);
-  sprintf(str, "     next or n, back or b, take or t, drop or d, exit or e");
+  sprintf(str, "next or n, back or b, take or t, drop or d, exit or e, left or l, right or r");
   screen_area_puts(ge->help, str);
 
   /* Paint in the feedback area */

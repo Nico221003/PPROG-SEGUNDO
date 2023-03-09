@@ -112,6 +112,25 @@ Id player_get_location(Player* player);
  */
 STATUS player_set_location(Player* player, Id id);
 
+/**
+ * @brief It gets the health of the player
+ * @author Alejandra Palma
+ *
+ * @param player pointer to the player
+ * @return the health of the player
+ */
+int player_get_health(Player *player);
+
+/**
+ * @brief It sets the health of the player
+ * @author Alejandra Palma
+ *
+ * @param player pointer to the player
+ * @param health health to be setted in the player struct
+ * @return OK if everything went well or ERROR in case of error
+ */
+STATUS player_set_health(Player *player, int health);
+
 
 /**
  * @brief prints the info of the player
