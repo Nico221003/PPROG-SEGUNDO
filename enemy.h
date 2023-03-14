@@ -11,7 +11,7 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#define ENEMY_ID 11
+#define ENEMY_ID 2
 
 #include "types.h"
 

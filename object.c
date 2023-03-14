@@ -22,7 +22,6 @@
 struct _Object
 {
   Id id;                    /*!< Id number of the object, it must be unique */
-  Id location;              /*!< Location of the object */
   char name[WORD_SIZE + 1]; /*!< Name of the object */
 };
 
@@ -111,7 +110,7 @@ STATUS object_set_name(Object *object, char *name)
 }
 
 /** It gets the name of a object*/
-const char *object_get_name(Object *Object)
+char *object_get_name(Object *Object)
 {
   if (!Object)
   {
@@ -120,31 +119,6 @@ const char *object_get_name(Object *Object)
   return Object->name;
 }
 
-/** It gets the location of an object*/
-Id object_get_location(Object *object)
-{
-  /*error control*/
-  if (!object)
-  {
-    return NO_ID;
-  }
-
-  return object->location;
-}
-
-/** It sets the location of an object*/
-STATUS object_set_location(Object *object, Id id)
-{
-  /*error control*/
-  if (!object)
-  {
-    return ERROR;
-  }
-  /*the new location is the given value*/
-  object->location = id;
-
-  return OK;
-}
 
 /** It prints the object information
  */

@@ -6,25 +6,28 @@
 
 
 STATUS game_reader_create_from_file(Game *game, char *filename) {
+
   if (game_create(game) == ERROR) {
     return ERROR;
   }
 
-  if (game_reader_load_spaces(game, filename) == ERROR) {
+  if (game_reader_load_spaces(game, filename) == ERROR){
     return ERROR;
   }
 
-  game_reader_load_spaces(game, filename);
+  if(game_reader_load_objects(game, filename) == ERROR){
+    return ERROR;
+  }
 
-  /* The player and the object are located in the first space */
-  game_set_player_location(game, game_reader_get_space_id_at(game, 0));
-  game_set_object_location(game, game_reader_get_space_id_at(game, 0));
+
+  /* The player is located in the first space
+  game_set_player_location(game, game_reader_get_space_id_at(game, 0));*/
 
   return OK;
 }
 
 
-STATUS game_reader_add_space(Game *game, Space *space) {
+STATUS game_reader_add_space(Game *game, Space *space){
   int i = 0;
 
   if (space == NULL) {
@@ -44,41 +47,29 @@ STATUS game_reader_add_space(Game *game, Space *space) {
   return OK;
 }
 
-STATUS game_reader_add_object(Game *game, Object *object) {
+
+STATUS game_reader_add_object(Game *game, Object *object){
+
   int i = 0;
 
-  if (object == NULL) {
+  if (object == NULL || game == NULL){
     return ERROR;
   }
 
-  while (i < MAX_OBJECT && game->object != NULL) {
+
+  /* Como mucho 1 objeto por espacio type of comprobación*/
+  /*if (i >= MAX_SPACES){
+    return ERROR;
+  }*/
+
+  while(i<MAX_OBJ && game->object[i] != NULL){
     i++;
   }
 
-  if (i >= MAX_OBJECT) {
-    return ERROR;
-  }
-
-  game->object = object;
+  /*Metemos el objeto en la posición de array que le toque*/
+  game->object[i] = object;
 
   return OK;
-}
-
-
-Id game_reader_get_space_id_at(Game *game, int position) {
-  if (position < 0 || position >= MAX_SPACES) {
-    return NO_ID;
-  }
-
-  return space_get_id(game->spaces[position]);
-}
-
-Id game_reader_get_object_id_at(Game *game, int position) {
-  if (position < 0 || position >= MAX_SPACES) {
-    return NO_ID;
-  }
-
-  return object_get_id(game->object);
 }
 
 
@@ -139,36 +130,51 @@ STATUS game_reader_load_spaces(Game *game, char *filename) {
   return status;
 }
 
-STATUS game_reader_load_objects(Game *game, char *filename) {
-  FILE *file = NULL;
-  char line[WORD_SIZE] = "";
-  char name[WORD_SIZE] = "";
-  char *toks = NULL;
-  Id id = NO_ID;
-  Object *object = NULL;
-  STATUS status = OK;
 
+STATUS game_reader_load_objects(Game* game, char* filename){
+
+  FILE* file = NULL;
+
+  char line[WORD_SIZE] = "";
+  char* toks = NULL;
+  
+  Id id = NO_ID;
+  char name[WORD_SIZE] = "";
+  Id location = NO_ID;
+  
+  Object* object = NULL;
+  STATUS status = OK;
+  
   if (!filename) {
     return ERROR;
   }
-
+  
   file = fopen(filename, "r");
   if (file == NULL) {
     return ERROR;
   }
-
+  
   while (fgets(line, WORD_SIZE, file)) {
-    if (strncmp("#s:", line, 3) == 0) {
+
+    if (strncmp("#o:", line, 3) == 0) {
+      
       toks = strtok(line + 3, "|");
       id = atol(toks);
+      
       toks = strtok(NULL, "|");
       strcpy(name, toks);
+      
+      toks = strtok(NULL, "|");
+      location = atol(toks);
+ 
 #ifdef DEBUG
-      printf("Leido: %ld|%s\n", id, name,);
+      printf("Leido: %ld|%s|%ld\n", id, name, location);
 #endif
+         
       object = object_create(id);
-      if (object != NULL) {
-        object_set_name(object , name);
+      if (location != NO_ID){
+        object_set_name(object, name);
+        game_set_object_location(game, location, id);
         game_reader_add_object(game, object);
       }
     }
@@ -177,8 +183,8 @@ STATUS game_reader_load_objects(Game *game, char *filename) {
   if (ferror(file)) {
     status = ERROR;
   }
-
+  
   fclose(file);
-
+  
   return status;
 }

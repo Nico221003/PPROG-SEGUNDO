@@ -13,6 +13,8 @@
 
 #define WORD_SIZE 1000
 #define NO_ID -1
+#define MAX_OBJ 20
+#define MAX_IDS 20
 
 typedef long Id;
 

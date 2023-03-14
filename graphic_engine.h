@@ -15,6 +15,7 @@
 #include "game.h"
 #include "command.h"
 #include "space.h"
+#include "set.h"
 #include "types.h"
 
 typedef struct _Graphic_engine Graphic_engine;
@@ -43,5 +44,6 @@ void graphic_engine_destroy(Graphic_engine *ge);
  * @param game pointer to the game
  */
 void graphic_engine_paint_game(Graphic_engine *ge, Game *game);
+
 
 #endif

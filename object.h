@@ -13,7 +13,6 @@
 
 #include "types.h"
 
-#define MAX_OBJECT 1
 #define FIRST_OBJECT 1
 #define WORD_SIZE 1000
 
@@ -76,26 +75,7 @@ STATUS object_set_name(Object *object, char *name);
  * @param Object a pointer to the object
  * @return  a string with the name of the object
  */
-const char *object_get_name(Object *object);
-
-/**
- * @brief It gets the location of an object
- * @author Alejandra Palma
- *
- * @param Object a pointer to the object
- * @return  a id with the location of the object
- */
-Id object_get_location(Object *object);
-
-/**
- * @brief It sets the location of an object with a given value
- * @author Alejandra Palma
- *
- * @param Object a pointer to the object
- * @param value  to set the new location
- * @return OK, if everything goes well or ERROR if there was some mistake
- */
-STATUS object_set_location(Object *object, Id id);
+char *object_get_name(Object *object);
 
 /**
  * @brief It prints the object information
